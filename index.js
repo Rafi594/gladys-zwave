@@ -1,5 +1,4 @@
 
-
 module.exports = function (sails) {
 
     var connect = require('./lib/zwave.connect.js');

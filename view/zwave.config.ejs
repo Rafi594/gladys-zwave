@@ -1,0 +1,21 @@
+<div data-ng-controller="ZwaveCtrl as yet">
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Identifier</th>
+                <th>Name</th>
+                <th>Type</th>
+                <th>Help</th>
+                <th>Item</th>
+            </tr>
+        
+            <tr ng-repeat="device in yet.devices" class="ng-cloak">
+                <td>{{device.identifier}}</td>
+                <td>{{device.name}}</td>
+                <td>{{device.type}}</td>
+                <td>{{device.help}}</td>
+                <td>{{device.item}}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
