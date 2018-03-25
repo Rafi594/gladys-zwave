@@ -19,17 +19,19 @@
     function ZwaveCtrl($scope) {
         /* jshint validthis: true */
         var yet = this;
-        yet.devices = {}
+
+        yet.nodes = [];
         
         activate();
 
         function activate() {
-            io.socket.on('zwave', function (device) {                
+            io.socket.on('zwave', function (nodes) {                
                 $scope.$apply(function(){
-                    //yet.devices = device
+                    //yet.devices.push(device)
+                    yet.nodes = nodes;
+                    console.log(yet.nodes)
                 });                
-                console.log(device)
             });
-        }      
+        }    
     }
 })();
