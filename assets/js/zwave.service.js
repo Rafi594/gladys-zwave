@@ -12,11 +12,11 @@
 
     angular
         .module('gladys')
-        .factory('zwaveService', zwaveService);
+        .factory('zwaveService', ZwaveService);
 
-    zwaveService.$inject = ['$http'];
+    ZwaveService.$inject = ['$http'];
 
-    function zwaveService($http) {
+    function ZwaveService($http) {
         
         var service = {
             addNode: addNode,
@@ -32,15 +32,15 @@
         }
 
         function removeNode(id) {
-            return $http({method: 'DELETE', url: '/zwave/removenode/' + id});
+            return $http({method: 'DELETE', url: '/zwave/removenode/'  + id});
         }
 
         function setNodeName(options) {
-            return $http({method: 'PATCH', url: '/zwave/setnodename', data: options});
+            return $http({method: 'PATCH', url: '/zwave/setnodename/' , data: options});
         }
 
         function healNetwork() {
-            return $http({method: 'POST', url: '/zwave/healnetwork'});
+            return $http({method: 'POST', url: '/zwave/healnetwork' });
         }
     }
 })();

@@ -7,31 +7,31 @@
   * @author :: Mathieu Andrade
   */
     
-(function () {
+ (function () {
     'use strict';
 
     angular
         .module('gladys')
         .controller('ZwaveCtrl', ZwaveCtrl);
 
-    ZwaveCtrl.$inject = ['zwaveService', '$scope'];
+    ZwaveCtrl.$inject = ['zwaveService', 'notificationService', '$scope'];
 
-    function ZwaveCtrl(zwaveService, $scope) {
+    function ZwaveCtrl(zwaveService, notificationService, $scope) {
         /* jshint validthis: true */
-        var vm = this;
-        vm.addNode = addNode;
-        vm.healNetwork = healNetwork;
-        vm.setNodeName = setNodeName;
-        vm.removeNode = removeNode;
+        var vm = this
+        vm.addNode = addNode
+        vm.healNetwork = healNetwork
+        vm.setNodeName = setNodeName
+        vm.removeNode = removeNode
 
-        vm.nodes = [];
+        vm.nodes = []
         
-        activate();
+        activate()
 
         function activate() {
             io.socket.on('zwave', function (nodes) {                
                 $scope.$apply(function(){
-                    vm.nodes = nodes;
+                    vm.nodes = nodes
                     console.log(vm.nodes)
                 });                
             });
@@ -52,15 +52,13 @@
         }
 
         function healNetwork(){
-            console.log("healnetwork")
             return zwaveService.healNetwork()
                 .then(function(result){
-                    console.log(result)
+                    if(result.statu == 200){notificationService.successNotification('Lancement de la guérison du réseau');}
                 })
         }
 
         function setNodeName(nodeId, name){
-            console.log("setnodename")
             return zwaveService.setNodeName({nodeId: nodeId, name: name})
                 .then(function(result){
                     console.log(result)

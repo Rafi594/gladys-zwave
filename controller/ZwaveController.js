@@ -7,10 +7,10 @@
   * @author :: Mathieu Andrade
 */
 
-addNode = require('../lib/addNode.js');
-removeNode = require('../lib/removeNode.js');
-setNodeName = require('../lib/setNodeName.js');
-healNetwork = require('../lib/healNetwork.js');
+addNode = require('../lib/zwave.addNode.js');
+removeNode = require('../lib/zwave.removeNode.js');
+setNodeName = require('../lib/zwave.setNodeName.js');
+healNetwork = require('../lib/zwave.healNetwork.js');
 
 module.exports = {
 
@@ -25,13 +25,11 @@ module.exports = {
   },
 
   setName: function(req, res, next){
-    sails.log.debug("setName")
     setNodeName(req.body)
       .then((result) => res.json(result))
   },
 
   heal: function(req, res, next){
-    sails.log.debug("heal")
     healNetwork()
       .then((result) => res.json(result))
   },

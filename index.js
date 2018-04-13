@@ -6,6 +6,7 @@ module.exports = function (sails) {
     var exec = require('./lib/zwave.exec.js');
     var setup = require('./lib/zwave.setup.js');
     var zwaveInstance = require('./lib/zwave.shared.js').zwave;
+    var zwaveController = require('./controller/zwaveController.js');
 
     gladys.on('ready', function(){
         connect();
@@ -16,6 +17,14 @@ module.exports = function (sails) {
         disconnect,
         exec,
         setup,
-        zwaveInstance
+        zwaveInstance,
+        routes: {
+            after: {
+                'post /zwave/addnode': zwaveController.add,
+                'delete /zwave/removenode/:id': zwaveController.remove,
+                'patch /zwave/setnodename': zwaveController.setName,
+                'post /zwave/healnetwork': zwaveController.heal,
+            }
+        }
     };
 };
