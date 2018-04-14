@@ -63,7 +63,11 @@
                             <div class="col-lg-8">
                                 <div class="row" ng-show="param.type != 'list'">
                                     <div class="col-lg-3">
-                                        <input class="form-control input-sm" type="text" value="{{param.value}}">
+                                        <input class="form-control input-sm" type="text" 
+                                                ng-init="value = vm.selectedNode.params[$index].value" 
+                                                value="{{value}}" 
+                                                ng-model="value" 
+                                                ng-change="vm.selectedNode.params[$index].value = value">
                                     </div>
                                     <div class="col-lg-9">
                                         <span  ng-show="param.unit != ''">({{param.unit}})</span>
@@ -71,8 +75,8 @@
                                 </div>
                                 <div class="row" ng-show="param.type == 'list'">
                                     <div class="col-lg-6">
-                                        <select class="form-control">
-                                            <option ng-repeat="item in param.item" ng-selected="param.value == item" value="{{item}}">{{item}}</option>
+                                        <select class="form-control" ng-init="selectedValue = param.value" ng-model="selectedValue" ng-change="vm.selectedNode.params[$index].value = selectedValue">
+                                            <option ng-repeat="item in param.item" ng-selected="selectedValue == item" value="{{item}}">{{item}}</option>
                                         </select>
                                     </div>
                                     <div class="col-lg-6">
@@ -86,7 +90,7 @@
                     </div>  
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary">Appliquer la configuration</button>
+                    <button type="button" class="btn btn-primary btn-flat" ng-click="vm.setNodeParam(vm.selectedNode)">Appliquer la configuration</button>
                 </div>
             </div>
         </div>

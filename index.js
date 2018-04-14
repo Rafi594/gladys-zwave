@@ -24,6 +24,7 @@ module.exports = function (sails) {
                 'delete /zwave/removenode/:id': zwaveController.remove,
                 'patch /zwave/setnodename': zwaveController.setName,
                 'post /zwave/healnetwork': zwaveController.heal,
+                'patch /zwave/setnodeparam': zwaveController.setParam,
             }
         }
     };

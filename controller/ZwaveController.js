@@ -11,6 +11,7 @@ addNode = require('../lib/zwave.addNode.js');
 removeNode = require('../lib/zwave.removeNode.js');
 setNodeName = require('../lib/zwave.setNodeName.js');
 healNetwork = require('../lib/zwave.healNetwork.js');
+setNodeParam = require('../lib/zwave.setNodeParam.js');
 
 module.exports = {
 
@@ -31,6 +32,11 @@ module.exports = {
 
   heal: function(req, res, next){
     healNetwork()
+      .then((result) => res.json(result))
+  },
+
+  setParam: function(req, res, next){
+    setNodeParam(req.body)
       .then((result) => res.json(result))
   },
 

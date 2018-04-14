@@ -7,7 +7,7 @@
   * @author :: Mathieu Andrade
   */
   
-(function () {
+ (function () {
     'use strict';
 
     angular
@@ -22,7 +22,8 @@
             addNode: addNode,
             removeNode: removeNode,
             setNodeName: setNodeName,
-            healNetwork: healNetwork
+            healNetwork: healNetwork,
+            setNodeParam: setNodeParam
         };
 
         return service;
@@ -32,15 +33,19 @@
         }
 
         function removeNode(id) {
-            return $http({method: 'DELETE', url: '/zwave/removenode/'  + id});
+            return $http({method: 'DELETE', url: '/zwave/removenode/' + id});
         }
 
         function setNodeName(options) {
-            return $http({method: 'PATCH', url: '/zwave/setnodename/' , data: options});
+            return $http({method: 'PATCH', url: '/zwave/setnodename/', data: options});
         }
 
         function healNetwork() {
             return $http({method: 'POST', url: '/zwave/healnetwork' });
+        }
+
+        function setNodeParam(options) {
+            return $http({method: 'PATCH', url: '/zwave/setnodeparam/', data: options});
         }
     }
 })();

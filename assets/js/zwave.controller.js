@@ -23,6 +23,7 @@
         vm.healNetwork = healNetwork
         vm.setNodeName = setNodeName
         vm.removeNode = removeNode
+        vm.setNodeParam = setNodeParam
 
         vm.nodes = []
         
@@ -54,14 +55,20 @@
         function healNetwork(){
             return zwaveService.healNetwork()
                 .then(function(result){
-                    if(result.statu == 200){notificationService.successNotification('Lancement de la guérison du réseau');}
+                    if(result.status == 200){notificationService.successNotification('Lancement de la guérison du réseau !')}
+                    else{notificationService.errorNotification('Une erreur est survenue')}
                 })
         }
 
         function setNodeName(nodeId, name){
             return zwaveService.setNodeName({nodeId: nodeId, name: name})
+        }
+
+        function setNodeParam(node){
+            return zwaveService.setNodeParam(node)
                 .then(function(result){
-                    console.log(result)
+                    if(result.status == 200){notificationService.successNotification('Paramètres appliqués !');}
+                    else{notificationService.errorNotification('Une erreur est survenue')}
                 })
         }
 
