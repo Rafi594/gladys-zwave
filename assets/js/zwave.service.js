@@ -21,9 +21,11 @@
         var service = {
             addNode: addNode,
             removeNode: removeNode,
+            getNodeParams: getNodeParams,
             setNodeName: setNodeName,
             healNetwork: healNetwork,
-            setNodeParam: setNodeParam
+            setNodeParam: setNodeParam,
+            softReset : softReset
         };
 
         return service;
@@ -32,8 +34,12 @@
             return $http({method: 'POST', url: '/zwave/addnode' });
         }
 
-        function removeNode(id) {
-            return $http({method: 'DELETE', url: '/zwave/removenode/' + id});
+        function removeNode() {
+            return $http({method: 'DELETE', url: '/zwave/removenode'});
+        }
+
+        function getNodeParams(id) {
+            return $http({method: 'GET', url: '/zwave/getnodeparams/' + id});
         }
 
         function setNodeName(options) {
@@ -46,6 +52,10 @@
 
         function setNodeParam(options) {
             return $http({method: 'PATCH', url: '/zwave/setnodeparam/', data: options});
+        }
+
+        function softReset() {
+            return $http({method: 'GET', url: '/zwave/softreset/'});
         }
     }
 })();

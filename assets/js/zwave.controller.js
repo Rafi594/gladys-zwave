@@ -24,31 +24,71 @@
         vm.setNodeName = setNodeName
         vm.removeNode = removeNode
         vm.setNodeParam = setNodeParam
+        vm.getNodeParams = getNodeParams
+        vm.softReset = softReset
 
         vm.nodes = []
+        vm.selectedNodeParams = [];
+        vm.nodesReady = false
+        vm.paramsReady = false
+        vm.nodesIsEmpty = false
         
         activate()
 
         function activate() {
-            io.socket.on('zwave', function (nodes) {                
+
+            timer(vm.nodes)
+                .then(function(res){
+                    $scope.$apply(function(){
+                        vm.nodesIsEmpty = res
+                    });
+                })
+
+            io.socket.on('nodes', function (nodes) {
                 $scope.$apply(function(){
                     vm.nodes = nodes
-                    console.log(vm.nodes)
+                    if(vm.nodes.length == 0) vm.nodesIsEmpty = true
+                    vm.nodesIsEmpty = false
+                    vm.nodesReady = true
                 });                
             });
+
+            io.socket.on('nodeParams', function (params) {                
+                $scope.$apply(function(){
+                    vm.selectedNodeParams = params
+                    vm.paramsReady = true
+                });  
+            });
+
+            io.socket.on('addNode', function (node) {                
+                $scope.$apply(function(){
+                    vm.nodes.push(node)
+                    $(".zwave-inclusionModal").modal("hide")
+                });  
+            });
+            
         }
         
         function addNode(){
             return zwaveService.addNode()
                 .then(function(result){
                     console.log(result)
+                    if(result.status != 200){
+                        notificationService.errorNotification('Une erreur est survenue')
+                        $(".zwave-inclusionModal").modal("hide")
+                    }
                 })
         }
 
         function removeNode(){
-            return zwaveService.removeNode(10)
+            return zwaveService.removeNode()
                 .then(function(result){
                     console.log(result)
+                    if(result.status == 200){
+                        notificationService.successNotification('Le noeud a été exclu du réseau !')
+                        //TODO: supprimer le noeud exclu de la liste
+                    }else{notificationService.errorNotification('Une erreur est survenue')}
+                    $(".zwave-exclusionModal").modal("hide")
                 })
         }
 
@@ -62,6 +102,10 @@
 
         function setNodeName(nodeId, name){
             return zwaveService.setNodeName({nodeId: nodeId, name: name})
+                .then(function(result){
+                    if(result.status == 200){notificationService.successNotification('Nom du noeud mis à jour !');}
+                    else{notificationService.errorNotification('Une erreur est survenue')}
+                })
         }
 
         function setNodeParam(node){
@@ -70,6 +114,43 @@
                     if(result.status == 200){notificationService.successNotification('Paramètres appliqués !');}
                     else{notificationService.errorNotification('Une erreur est survenue')}
                 })
+        }
+        
+        function getNodeParams(id){
+            vm.selectedNodeParams = []
+            vm.paramsReady = false
+            return zwaveService.getNodeParams(id)
+                .then(function(result){
+                    if(result.status == 200){
+                        timer(vm.selectedNodeParams)
+                            .then(function(res){
+                                if(res == true) {
+                                    $(".zwave-configModal").modal("hide")
+                                    notificationService.errorNotification('Une erreur est survenue')
+                                }
+                            })
+                    }else{
+                        $(".zwave-configModal").modal("hide")
+                        notificationService.errorNotification('Une erreur est survenue')
+                    }
+                })
+        }
+
+        function softReset(){
+            return zwaveService.softReset()
+                .then(function(result){
+                    if(result.status == 200){notificationService.successNotification('Redémarrage en cours.. ');}
+                    else{notificationService.errorNotification('Une erreur est survenue')}
+                })
+        }
+
+        function timer(options){
+            return new Promise(function(resolve, reject) {
+                setTimeout((function() {
+                   if(options.length == 0 || options == null) resolve(true)
+                   resolve(false)
+               }), 30000);
+            })
         }
 
     }

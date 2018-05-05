@@ -21,10 +21,12 @@ module.exports = function (sails) {
         routes: {
             after: {
                 'post /zwave/addnode': zwaveController.add,
-                'delete /zwave/removenode/:id': zwaveController.remove,
+                'delete /zwave/removenode': zwaveController.remove,
+                'get /zwave/getnodeparams/:id': zwaveController.getParams,
                 'patch /zwave/setnodename': zwaveController.setName,
                 'post /zwave/healnetwork': zwaveController.heal,
                 'patch /zwave/setnodeparam': zwaveController.setParam,
+                'get /zwave/softreset': zwaveController.reset,
             }
         }
     };

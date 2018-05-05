@@ -9,19 +9,26 @@
 
 addNode = require('../lib/zwave.addNode.js');
 removeNode = require('../lib/zwave.removeNode.js');
+getNodeParams = require('../lib/zwave.getNodeParams.js');
 setNodeName = require('../lib/zwave.setNodeName.js');
 healNetwork = require('../lib/zwave.healNetwork.js');
 setNodeParam = require('../lib/zwave.setNodeParam.js');
+softReset = require('../lib/zwave.softReset.js');
 
 module.exports = {
 
   add: function(req, res, next){
-    addnode()
+    addNode()
       .then((result) => res.json(result))
   },
 
   remove: function(req, res, next){
-    removeNode({id: req.params.id})
+    removeNode()
+      .then((result) => res.json(result))
+  },
+
+  getParams: function(req, res, next){
+    getNodeParams({id: req.params.id})
       .then((result) => res.json(result))
   },
 
@@ -37,6 +44,11 @@ module.exports = {
 
   setParam: function(req, res, next){
     setNodeParam(req.body)
+      .then((result) => res.json(result))
+  },
+
+  reset: function(req, res, next){
+    softReset()
       .then((result) => res.json(result))
   },
 

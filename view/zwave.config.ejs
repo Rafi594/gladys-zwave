@@ -7,16 +7,33 @@
                 <div class="btn-group open">
                     <button type="button" class="btn btn-primary btn-flat btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="true">Gestion du réseau</button>
                     <ul class="dropdown-menu" role="menu">
-                    <li><a href="" ng-click="vm.addNode()">Inclure un noeud</a></li>
-                    <li><a href="">Exclure un noeud</a></li>
-                    <li class="divider"></li>
+                    <li><a href="" ng-click="vm.addNode()" data-toggle="modal" data-target=".zwave-inclusionModal">Inclure un noeud</a></li>
+                    <li><a href="" ng-click="vm.removeNode()" data-toggle="modal" data-target=".zwave-exclusionModal">Exclure un noeud</a></li>
                     <li><a href="" ng-click="vm.healNetwork()">Guérir le réseau</a></li>
+                    <li class="divider"></li>
+                    <li><a href="" ng-click="vm.softReset()">Redémarer le contrôleur</a></li>
                     </ul>
                 </div>
             </div>
         </div>
         <div class="box-body">
-            <table class="table">
+
+            <div ng-show="vm.nodesIsEmpty">
+                <h4 class="text-center" style="padding: 20px">Il n'y a aucun noeud. Pour en ajouter cliquez sur gestion du réseau puis sur inclure un noeud.</h4>
+            </div>
+
+            <div class="row" ng-show="!vm.nodesReady && !vm.nodesIsEmpty">
+                <div class="col-centered col-md-4 col-md-offset-4">
+                    <div class="spinner-box">
+                        <div class="spinner">
+                            <div class="double-bounce1"></div>
+                            <div class="double-bounce2"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <table class="table" ng-show="vm.nodesReady && !vm.nodesIsEmpty">
                 <thead>
                     <tr>
                         <th>Id du nœud</th>
@@ -37,7 +54,7 @@
                         <td>{{node.info_node.manufacturer}}</td>
                         <td>{{node.info_node.product}}</td>
                         <td>
-                            <button class="btn btn-flat btn-primary" data-toggle="modal" data-target=".zwave-config" ng-click="vm.selectedNode = node;">Configurer</button>
+                            <button class="btn btn-flat btn-primary" data-toggle="modal" data-target=".zwave-configModal" ng-click="vm.getNodeParams(node.info_node.node_id)">Configurer</button>
                         </td>
                     </tr>
                 </tbody>
@@ -45,38 +62,49 @@
         </div>
     </div>
 
-    <div id="zwave-config" class="modal fade zwave-config" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal fade zwave-configModal" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                     </button>
-                    <h4 class="modal-title" id="myLargeModalLabel">Configuration du Noeud</h4>
+                    <h4 class="modal-title">Configuration du Noeud</h4>
                 </div>
                 <div class="modal-body">
-                    <div ng-repeat="param in vm.selectedNode.params">
+
+                    <div class="row" ng-show="!vm.paramsReady">
+                        <div class="col-centered col-md-4 col-md-offset-4">
+                            <div class="spinner-box">
+                                <div class="spinner">
+                                    <div class="double-bounce1"></div>
+                                    <div class="double-bounce2"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div ng-repeat="param in vm.selectedNodeParams" ng-show="vm.paramsReady">
                         <div class="row">
                             <div class="col-lg-4">
-                                <strong>{{param.index}} - {{param.name}}</strong>
+                                <strong>{{param.index}} - {{param.label}}</strong>
                             </div>
                             <div class="col-lg-8">
                                 <div class="row" ng-show="param.type != 'list'">
                                     <div class="col-lg-3">
                                         <input class="form-control input-sm" type="text" 
-                                                ng-init="value = vm.selectedNode.params[$index].value" 
+                                                ng-init="value = vm.selectedNodeParams[$index].value" 
                                                 value="{{value}}" 
                                                 ng-model="value" 
-                                                ng-change="vm.selectedNode.params[$index].value = value">
+                                                ng-change="vm.selectedNodeParams[$index].value = value">
                                     </div>
                                     <div class="col-lg-9">
-                                        <span  ng-show="param.unit != ''">({{param.unit}})</span>
+                                        <span  ng-show="param.units != ''">({{param.units}})</span>
                                     </div>
                                 </div>
                                 <div class="row" ng-show="param.type == 'list'">
                                     <div class="col-lg-6">
                                         <select class="form-control" ng-init="selectedValue = param.value" ng-model="selectedValue" ng-change="vm.selectedNode.params[$index].value = selectedValue">
-                                            <option ng-repeat="item in param.item" ng-selected="selectedValue == item" value="{{item}}">{{item}}</option>
+                                            <option ng-repeat="values in param.values" ng-selected="selectedValue == values" value="{{values}}">{{values}}</option>
                                         </select>
                                     </div>
                                     <div class="col-lg-6">
@@ -87,10 +115,66 @@
                         <br>
                         <p class="text-muted">{{param.help}}</p>
                         <hr>
-                    </div>  
+                    </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary btn-flat" ng-click="vm.setNodeParam(vm.selectedNode)">Appliquer la configuration</button>
+                    <button type="button" class="btn btn-primary btn-flat" ng-click="vm.setNodeParam()">Appliquer la configuration</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade zwave-inclusionModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                    <h4 class="modal-title">Inclusion du Noeud</h4>
+                </div>
+                <div class="modal-body">
+                    <div>
+                        <span  class="text-center" style="padding: 20px">Veuillez appuyer sur le bouton du dispositif afin de lancer la procédure d'inclusion.</span>
+                    </div>
+                    <div class="row">
+                        <div class="col-centered col-md-4 col-md-offset-4">
+                            <div class="spinner-box">
+                                <div class="spinner">
+                                    <div class="double-bounce1"></div>
+                                    <div class="double-bounce2"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade zwave-exclusionModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                    <h4 class="modal-title">Exclusion du Noeud</h4>
+                </div>
+                <div class="modal-body">
+                    <div>
+                        <span  class="text-center" style="padding: 20px">Veuillez appuyer sur le bouton du dispositif afin de lancer la procédure d'exclusion.</span>
+                    </div>
+                    <div class="row">
+                        <div class="col-centered col-md-4 col-md-offset-4">
+                            <div class="spinner-box">
+                                <div class="spinner">
+                                    <div class="double-bounce1"></div>
+                                    <div class="double-bounce2"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
