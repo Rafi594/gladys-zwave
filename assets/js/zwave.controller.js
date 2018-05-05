@@ -14,9 +14,9 @@
         .module('gladys')
         .controller('ZwaveCtrl', ZwaveCtrl);
 
-    ZwaveCtrl.$inject = ['zwaveService', 'notificationService', '$scope'];
+    ZwaveCtrl.$inject = ['zwaveService', '$scope'];
 
-    function ZwaveCtrl(zwaveService, notificationService, $scope) {
+    function ZwaveCtrl(zwaveService, $scope) {
         /* jshint validthis: true */
         var vm = this
         vm.addNode = addNode
@@ -74,7 +74,7 @@
                 .then(function(result){
                     console.log(result)
                     if(result.status != 200){
-                        notificationService.errorNotification('Une erreur est survenue')
+                        zwaveService.errorNotificationTranslated('ERROR')
                         $(".zwave-inclusionModal").modal("hide")
                     }
                 })
@@ -85,9 +85,9 @@
                 .then(function(result){
                     console.log(result)
                     if(result.status == 200){
-                        notificationService.successNotification('Le noeud a été exclu du réseau !')
+                        zwaveService.successNotificationTranslated('EXCLUDED_NODE')
                         //TODO: supprimer le noeud exclu de la liste
-                    }else{notificationService.errorNotification('Une erreur est survenue')}
+                    }else{zwaveService.errorNotificationTranslated('ERROR')}
                     $(".zwave-exclusionModal").modal("hide")
                 })
         }
@@ -95,24 +95,24 @@
         function healNetwork(){
             return zwaveService.healNetwork()
                 .then(function(result){
-                    if(result.status == 200){notificationService.successNotification('Lancement de la guérison du réseau !')}
-                    else{notificationService.errorNotification('Une erreur est survenue')}
+                    if(result.status == 200){zwaveService.successNotificationTranslated('HEALING_NETWORK')}
+                    else{zwaveService.errorNotificationTranslated('ERROR')}
                 })
         }
 
         function setNodeName(nodeId, name){
             return zwaveService.setNodeName({nodeId: nodeId, name: name})
                 .then(function(result){
-                    if(result.status == 200){notificationService.successNotification('Nom du noeud mis à jour !');}
-                    else{notificationService.errorNotification('Une erreur est survenue')}
+                    if(result.status == 200){zwaveService.successNotificationTranslated('NODE_NAME_UPDATED');}
+                    else{zwaveService.errorNotificationTranslated('ERROR')}
                 })
         }
 
         function setNodeParam(node){
             return zwaveService.setNodeParam(node)
                 .then(function(result){
-                    if(result.status == 200){notificationService.successNotification('Paramètres appliqués !');}
-                    else{notificationService.errorNotification('Une erreur est survenue')}
+                    if(result.status == 200){zwaveService.successNotificationTranslated('SETTINGS_APPLIED');}
+                    else{zwaveService.errorNotificationTranslated('ERROR')}
                 })
         }
         
@@ -126,12 +126,12 @@
                             .then(function(res){
                                 if(res == true) {
                                     $(".zwave-configModal").modal("hide")
-                                    notificationService.errorNotification('Une erreur est survenue')
+                                    zwaveService.errorNotificationTranslated('ERROR')
                                 }
                             })
                     }else{
                         $(".zwave-configModal").modal("hide")
-                        notificationService.errorNotification('Une erreur est survenue')
+                        zwaveService.errorNotificationTranslated('ERROR')
                     }
                 })
         }
@@ -139,8 +139,8 @@
         function softReset(){
             return zwaveService.softReset()
                 .then(function(result){
-                    if(result.status == 200){notificationService.successNotification('Redémarrage en cours.. ');}
-                    else{notificationService.errorNotification('Une erreur est survenue')}
+                    if(result.status == 200){zwaveService.successNotificationTranslated('RESTARTING');}
+                    else{zwaveService.errorNotificationTranslated('ERROR')}
                 })
         }
 

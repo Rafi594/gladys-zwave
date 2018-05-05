@@ -14,9 +14,9 @@
         .module('gladys')
         .factory('zwaveService', ZwaveService);
 
-    ZwaveService.$inject = ['$http'];
+    ZwaveService.$inject = ['$http', 'Notification', '$translate'];
 
-    function ZwaveService($http) {
+    function ZwaveService($http, Notification, $translate) {
         
         var service = {
             addNode: addNode,
@@ -25,7 +25,9 @@
             setNodeName: setNodeName,
             healNetwork: healNetwork,
             setNodeParam: setNodeParam,
-            softReset : softReset
+            softReset : softReset,
+            successNotificationTranslated: successNotificationTranslated,
+            errorNotificationTranslated: errorNotificationTranslated
         };
 
         return service;
@@ -56,6 +58,22 @@
 
         function softReset() {
             return $http({method: 'GET', url: '/zwave/softreset/'});
+        }
+
+        function successNotificationTranslated(key, complement){
+            return $translate(key)
+                .then(function (text) {
+                    if(complement) text += complement;
+                    Notification.success(text); 
+                });
+        }
+        
+        function errorNotificationTranslated(key, complement){
+            return $translate(key)
+                .then(function (text) {
+                    if(complement) text += complement;
+                    Notification.error(text); 
+                });
         }
     }
 })();
