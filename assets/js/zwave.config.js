@@ -1,5 +1,6 @@
 var translationsEN = {
     APPLY_CONFIGURATION:'Apply configuration',
+    CANCEL: 'Cancel',
     CONFIGURATION: 'Configuration',
     EMPTY_NODE_TABLE: 'There is no node. To add, click network management and then include a node.',
     ERROR: 'Something bad happened :/ Check Gladys logs for more informations.',
@@ -28,6 +29,7 @@ var translationsEN = {
 var translationsFR = {
     APPLY_CONFIGURATION:'Appliquer la configuration',
     CONFIGURATION: 'Configuration',
+    CANCEL: 'Annuler',
     EMPTY_NODE_TABLE: 'Il n\'y a aucun noeud. Pour en ajouter cliquez sur gestion du réseau puis sur inclure un noeud.',
     ERROR: 'Une erreur inconnue est arrivée :/ Regardez les logs Gladys pour plus d\'informations.',
     EXCLUDE_NODE: 'Exclure un noeud',
