@@ -83,13 +83,14 @@
                             </div>
                         </div>
                     </div>
+
                     <div ng-repeat="param in vm.selectedNodeParams" ng-show="vm.paramsReady">
                         <div class="row">
                             <div class="col-lg-4">
                                 <strong>{{param.index}} - {{param.label}}</strong>
                             </div>
                             <div class="col-lg-8">
-                                <div class="row" ng-show="param.type != 'list'">
+                                <div class="row" ng-if="param.type != 'list'">
                                     <div class="col-lg-3">
                                         <input class="form-control input-sm" type="text" 
                                                 ng-init="value = vm.selectedNodeParams[$index].value" 
@@ -101,10 +102,13 @@
                                         <span  ng-show="param.units != ''">({{param.units}})</span>
                                     </div>
                                 </div>
-                                <div class="row" ng-show="param.type == 'list'">
+                                <div class="row" ng-if="param.type == 'list'">
                                     <div class="col-lg-6">
-                                        <select class="form-control" ng-init="selectedValue = param.value" ng-model="selectedValue" ng-change="vm.selectedNode.params[$index].value = selectedValue">
-                                            <option ng-repeat="values in param.values" ng-selected="selectedValue == values" value="{{values}}">{{values}}</option>
+                                        <select class="form-control"
+                                                ng-model="selectedItem"
+                                                ng-init="vm.selectedNodeParams[$index].value = param.values.indexOf(param.value); selectedItem = vm.selectedNodeParams[$index].value"
+                                                ng-change="vm.selectedNodeParams[$index].value = selectedItem"
+                                                ng-options="param.values.indexOf(selectedItem) as selectedItem for selectedItem in param.values">
                                         </select>
                                     </div>
                                     <div class="col-lg-6">

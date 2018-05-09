@@ -32,6 +32,8 @@
         vm.nodesReady = false
         vm.paramsReady = false
         vm.nodesIsEmpty = false
+
+        var interval = null
         
         activate()
 
@@ -50,6 +52,8 @@
                     if(vm.nodes.length == 0) vm.nodesIsEmpty = true
                     vm.nodesIsEmpty = false
                     vm.nodesReady = true
+                    clearInterval(interval)
+                    console.log(vm.nodes)
                 });                
             });
 
@@ -57,6 +61,7 @@
                 $scope.$apply(function(){
                     vm.selectedNodeParams = params
                     vm.paramsReady = true
+                    clearInterval(interval)
                 });  
             });
 
@@ -108,8 +113,9 @@
                 })
         }
 
-        function setNodeParam(node){
-            return zwaveService.setNodeParam(node)
+        function setNodeParam(){
+            console.log(vm.selectedNodeParams)
+            return zwaveService.setNodeParam(vm.selectedNodeParams)
                 .then(function(result){
                     if(result.status == 200){zwaveService.successNotificationTranslated('SETTINGS_APPLIED');}
                     else{zwaveService.errorNotificationTranslated('ERROR')}
@@ -146,12 +152,11 @@
 
         function timer(options){
             return new Promise(function(resolve, reject) {
-                setTimeout((function() {
+                interval = setInterval((function() {
                    if(options.length == 0 || options == null) resolve(true)
                    resolve(false)
                }), 30000);
             })
         }
-
     }
 })();

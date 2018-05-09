@@ -6,7 +6,7 @@ module.exports = function (sails) {
     var exec = require('./lib/zwave.exec.js');
     var setup = require('./lib/zwave.setup.js');
     var zwaveInstance = require('./lib/zwave.shared.js').zwave;
-    var zwaveController = require('./controller/zwaveController.js');
+    var ZwaveController = require('./controller/ZwaveController.js');
 
     gladys.on('ready', function(){
         connect();
@@ -20,13 +20,13 @@ module.exports = function (sails) {
         zwaveInstance,
         routes: {
             after: {
-                'post /zwave/addnode': zwaveController.add,
-                'delete /zwave/removenode': zwaveController.remove,
-                'get /zwave/getnodeparams/:id': zwaveController.getParams,
-                'patch /zwave/setnodename': zwaveController.setName,
-                'post /zwave/healnetwork': zwaveController.heal,
-                'patch /zwave/setnodeparam': zwaveController.setParam,
-                'get /zwave/softreset': zwaveController.reset,
+                'post /zwave/addnode': ZwaveController.add,
+                'delete /zwave/removenode': ZwaveController.remove,
+                'get /zwave/getnodeparams/:id': ZwaveController.getParams,
+                'patch /zwave/setnodename': ZwaveController.setName,
+                'post /zwave/healnetwork': ZwaveController.heal,
+                'patch /zwave/setnodeparam': ZwaveController.setParam,
+                'get /zwave/softreset': ZwaveController.reset,
             }
         }
     };
