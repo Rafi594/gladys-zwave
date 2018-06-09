@@ -32,12 +32,14 @@
         vm.nodesReady = false
         vm.paramsReady = false
         vm.nodesIsEmpty = false
+        vm.timeLeft = 30;
 
         var interval = null
+        var timerCountDown;
         
         activate()
 
-        function activate() {
+        function activate() { 
 
             timer(vm.nodes)
                 .then(function(res){
@@ -53,7 +55,6 @@
                     vm.nodesIsEmpty = false
                     vm.nodesReady = true
                     clearInterval(interval)
-                    console.log(vm.nodes)
                 });                
             });
 
@@ -65,10 +66,22 @@
                 });  
             });
 
-            io.socket.on('addNode', function (node) {                
+            io.socket.on('newNodes', function (node) {                
                 $scope.$apply(function(){
                     vm.nodes.push(node)
                     $(".zwave-inclusionModal").modal("hide")
+                    zwaveService.addNode()
+                    clearTimeout(timerCountDown)
+                });  
+            });
+
+            io.socket.on('nodeRemoved', function (node) {                
+                $scope.$apply(function(){
+                    var removeIndex = vm.nodes.map(function(item) { return item.id; }).indexOf(node);
+                    vm.nodes.splice(removeIndex, 1)
+                    $(".zwave-exclusionModal").modal("hide")
+                    zwaveService.removeNode()
+                    clearTimeout(timerCountDown)
                 });  
             });
             
@@ -77,10 +90,12 @@
         function addNode(){
             return zwaveService.addNode()
                 .then(function(result){
-                    console.log(result)
                     if(result.status != 200){
                         zwaveService.errorNotificationTranslated('ERROR')
                         $(".zwave-inclusionModal").modal("hide")
+                    }else{
+                        vm.timeLeft = 30
+                        countdown($(".zwave-inclusionModal"), zwaveService.addNode);
                     }
                 })
         }
@@ -88,12 +103,10 @@
         function removeNode(){
             return zwaveService.removeNode()
                 .then(function(result){
-                    console.log(result)
                     if(result.status == 200){
-                        zwaveService.successNotificationTranslated('EXCLUDED_NODE')
-                        //TODO: supprimer le noeud exclu de la liste
+                        vm.timeLeft = 30
+                        countdown($(".zwave-exclusionModal"), zwaveService.removeNode);
                     }else{zwaveService.errorNotificationTranslated('ERROR')}
-                    $(".zwave-exclusionModal").modal("hide")
                 })
         }
 
@@ -114,7 +127,6 @@
         }
 
         function setNodeParam(){
-            console.log(vm.selectedNodeParams)
             return zwaveService.setNodeParam(vm.selectedNodeParams)
                 .then(function(result){
                     if(result.status == 200){zwaveService.successNotificationTranslated('SETTINGS_APPLIED');}
@@ -157,6 +169,20 @@
                    resolve(false)
                }), 30000);
             })
+        }
+
+        function countdown(modal, fun) {
+            timerCountDown = setInterval((function() {
+                if (vm.timeLeft == 0) {
+                    clearTimeout(timerCountDown);
+                    modal.modal("hide");
+                    fun()
+                } else {
+                    $scope.$apply(function(){
+                        vm.timeLeft--;
+                    });  
+                }
+            }), 1000);
         }
     }
 })();

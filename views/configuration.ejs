@@ -37,7 +37,7 @@
                 <thead>
                     <tr>
                         <th>{{ 'NODE_ID' | translate }}</th>
-                        <th>{{ 'NAME' | translate }}</th>
+                        <!--<th>{{ 'NAME' | translate }}</th>-->
                         <th>{{ 'TYPE' | translate }}</th>
                         <th>{{ 'MANUFACTURER' | translate }}</th>
                         <th>{{ 'PRODUCT' | translate }}</th>
@@ -47,9 +47,9 @@
                 <tbody>      
                     <tr ng-repeat="node in vm.nodes" class="ng-cloak">
                         <td>{{node.info_node.node_id}}</td>
-                        <td>
+                        <!--<td>
                             <input class="form-control input-sm" type="text" ng-model="node.info_node.name" ng-change="vm.setNodeName(node.info_node.node_id, node.info_node.name)">
-                        </td>
+                        </td>-->
                         <td>{{node.info_node.type}}</td>
                         <td>{{node.info_node.manufacturer}}</td>
                         <td>{{node.info_node.product}}</td>
@@ -143,12 +143,7 @@
                     </div>
                     <div class="row">
                         <div class="col-centered col-md-4 col-md-offset-4">
-                            <div class="spinner-box">
-                                <div class="spinner">
-                                    <div class="double-bounce1"></div>
-                                    <div class="double-bounce2"></div>
-                                </div>
-                            </div>
+                            <h2 class="text-center">{{vm.timeLeft}}</h2>
                         </div>
                     </div>
                 </div>
@@ -174,12 +169,7 @@
                     </div>
                     <div class="row">
                         <div class="col-centered col-md-4 col-md-offset-4">
-                            <div class="spinner-box">
-                                <div class="spinner">
-                                    <div class="double-bounce1"></div>
-                                    <div class="double-bounce2"></div>
-                                </div>
-                            </div>
+                            <h2 class="text-center">{{vm.timeLeft}}</h2>
                         </div>
                     </div>
                 </div>
