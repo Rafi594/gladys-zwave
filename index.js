@@ -19,6 +19,15 @@ module.exports = function (sails) {
         setup,
         zwaveInstance,
         routes: {
+            before: {
+                'post /zwave/addnode': (req, res, next) => sails.hooks.policies.middleware.checktoken(req, res, next),
+                'delete /zwave/removenode': (req, res, next) => sails.hooks.policies.middleware.checktoken(req, res, next),
+                'get /zwave/getnodeparams/:id': (req, res, next) => sails.hooks.policies.middleware.checktoken(req, res, next),
+                'patch /zwave/setnodename': (req, res, next) => sails.hooks.policies.middleware.checktoken(req, res, next),
+                'post /zwave/healnetwork': (req, res, next) => sails.hooks.policies.middleware.checktoken(req, res, next),
+                'patch /zwave/setnodeparam': (req, res, next) => sails.hooks.policies.middleware.checktoken(req, res, next),
+                'get /zwave/softreset': (req, res, next) => sails.hooks.policies.middleware.checktoken(req, res, next)
+            },
             after: {
                 'post /zwave/addnode': ZwaveController.add,
                 'delete /zwave/removenode': ZwaveController.remove,
