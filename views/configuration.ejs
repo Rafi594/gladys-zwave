@@ -1,8 +1,8 @@
 <div data-ng-controller="ZwaveCtrl as vm">
 
     <div class="box skin-box box-primary">
-        <div class="box-header with-border">
-            <h3 class="box-title">Zwave</h3>
+        <div class="box box-solid skin-box">
+            <h3 class="box-title">Nodes</h3>
             <div class="box-tools pull-right">
                 <div class="btn-group open">
                     <button type="button" class="btn btn-primary btn-flat btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="true">{{ 'NETWORK_MANAGEMENT' | translate }}</button>
@@ -180,4 +180,7 @@
         </div>
     </div>
 </div>
-    
+
+<script src="/hooks/zwave/js/zwave.config.js"></script>
+<script src="/hooks/zwave/js/zwave.controller.js"></script>
+<script src="/hooks/zwave/js/zwave.service.js"></script>
