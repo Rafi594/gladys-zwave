@@ -26,7 +26,8 @@ module.exports = function (sails) {
                 'patch /zwave/setnodename': (req, res, next) => sails.hooks.policies.middleware.checktoken(req, res, next),
                 'post /zwave/healnetwork': (req, res, next) => sails.hooks.policies.middleware.checktoken(req, res, next),
                 'patch /zwave/setnodeparam': (req, res, next) => sails.hooks.policies.middleware.checktoken(req, res, next),
-                'get /zwave/softreset': (req, res, next) => sails.hooks.policies.middleware.checktoken(req, res, next)
+                'get /zwave/softreset': (req, res, next) => sails.hooks.policies.middleware.checktoken(req, res, next),
+                'get /zwave/setup': (req, res, next) => sails.hooks.policies.middleware.checktoken(req, res, next)
             },
             after: {
                 'post /zwave/addnode': ZwaveController.add,
@@ -36,6 +37,7 @@ module.exports = function (sails) {
                 'post /zwave/healnetwork': ZwaveController.heal,
                 'patch /zwave/setnodeparam': ZwaveController.setParam,
                 'get /zwave/softreset': ZwaveController.reset,
+                'get /zwave/setup': ZwaveController.setup,
             }
         }
     };

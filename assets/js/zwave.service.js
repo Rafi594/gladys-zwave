@@ -26,6 +26,7 @@
             healNetwork: healNetwork,
             setNodeParam: setNodeParam,
             softReset : softReset,
+            setup : setup,
             successNotificationTranslated: successNotificationTranslated,
             errorNotificationTranslated: errorNotificationTranslated
         };
@@ -58,6 +59,10 @@
 
         function softReset() {
             return $http({method: 'GET', url: '/zwave/softreset/'});
+        }
+
+        function setup() {
+            return $http({method: 'GET', url: '/zwave/setup/'});
         }
 
         function successNotificationTranslated(key, complement){

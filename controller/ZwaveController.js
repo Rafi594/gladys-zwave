@@ -14,6 +14,7 @@ setNodeName = require('../lib/zwave.setNodeName.js');
 healNetwork = require('../lib/zwave.healNetwork.js');
 setNodeParam = require('../lib/zwave.setNodeParam.js');
 softReset = require('../lib/zwave.softReset.js');
+setupNodes = require('../lib/zwave.setup.js');
 
 module.exports = {
 
@@ -49,6 +50,11 @@ module.exports = {
 
   reset: function(req, res, next){
     softReset()
+      .then((result) => res.json(result))
+  },
+
+  setup: function(req, res, next){
+    setupNodes()
       .then((result) => res.json(result))
   },
 

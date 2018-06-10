@@ -39,7 +39,12 @@
         
         activate()
 
-        function activate() { 
+        function activate() {
+            
+            return zwaveService.setup()
+                .then(function(result){
+                    if(result.status != 200) zwaveService.errorNotificationTranslated('ERROR')
+                })
 
             timer(vm.nodes)
                 .then(function(res){
