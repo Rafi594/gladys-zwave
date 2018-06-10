@@ -1,11 +1,11 @@
 <div data-ng-controller="ZwaveCtrl as vm">
 
-    <div class="box skin-box box-primary">
-        <div class="box box-solid skin-box">
+    <div class="box skin-box box-default no-border" ng-cloak>
+        <div class="box-header with-border">
             <h3 class="box-title">Nodes</h3>
             <div class="box-tools pull-right">
-                <div class="btn-group open">
-                    <button type="button" class="btn btn-primary btn-flat btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="true">{{ 'NETWORK_MANAGEMENT' | translate }}</button>
+                <div class="btn-group">
+                    <button type="button" class="btn btn-primary btn-flat btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false">{{ 'NETWORK_MANAGEMENT' | translate }}</button>
                     <ul class="dropdown-menu" role="menu">
                     <li><a href="" ng-click="vm.addNode()" data-toggle="modal" data-target=".zwave-inclusionModal">{{ 'INCLUDE_NODE' | translate }}</a></li>
                     <li><a href="" ng-click="vm.removeNode()" data-toggle="modal" data-target=".zwave-exclusionModal">{{ 'EXCLUDE_NODE' | translate }}</a></li>
