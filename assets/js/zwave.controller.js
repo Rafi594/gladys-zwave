@@ -26,42 +26,24 @@
         vm.setNodeParam = setNodeParam
         vm.getNodeParams = getNodeParams
         vm.softReset = softReset
+        vm.getPorts = getPorts
+        vm.setPort = setPort
 
         vm.nodes = []
-        vm.selectedNodeParams = [];
+        vm.selectedNodeParams = []
+        vm.ports = []
+        vm.selectedPort = null
         vm.nodesReady = false
         vm.paramsReady = false
         vm.nodesIsEmpty = false
-        vm.timeLeft = 30;
+        vm.timeLeft = 30
 
         var interval = null
-        var timerCountDown;
+        var timerCountDown
         
         activate()
 
         function activate() {
-            
-            return zwaveService.setup()
-                .then(function(result){
-                    if(result.status != 200) zwaveService.errorNotificationTranslated('ERROR')
-                })
-
-            timer(vm.nodes)
-                .then(function(res){
-                    $scope.$apply(function(){
-                        vm.nodesIsEmpty = res
-                    });
-                })
-
-            io.socket.on('nodes', function (nodes) {
-                $scope.$apply(function(){
-                    vm.nodes = nodes
-                    if(vm.nodes.length == 0) vm.nodesIsEmpty = true
-                    vm.nodesIsEmpty = false
-                    vm.nodesReady = true
-                    clearInterval(interval)
-                });                
-            });
 
             io.socket.on('nodeParams', function (params) {                
                 $scope.$apply(function(){
@@ -89,6 +71,19 @@
                     clearTimeout(timerCountDown)
                 });  
             });
+
+            zwaveService.setup()
+                .then(function(result){
+                    if(result.status != 200) zwaveService.errorNotificationTranslated('ERROR')
+                    vm.nodes = result.data
+                    if(vm.nodes.length == 0) {
+                        vm.nodesIsEmpty = true
+                    }else {
+                        vm.nodesIsEmpty = false
+                        vm.nodesReady = true
+                        clearInterval(interval)
+                    }
+                })
             
         }
         
@@ -163,6 +158,24 @@
             return zwaveService.softReset()
                 .then(function(result){
                     if(result.status == 200){zwaveService.successNotificationTranslated('RESTARTING');}
+                    else{zwaveService.errorNotificationTranslated('ERROR')}
+                })
+        }
+
+        function getPorts(){
+            return zwaveService.getPorts()
+                .then(function(result){
+                    if(result.status == 200){
+                        vm.ports = result.data
+                    }
+                    else{zwaveService.errorNotificationTranslated('ERROR')}
+                })
+        }
+
+        function setPort(){
+            return zwaveService.setPort(vm.selectedPort)
+                .then(function(result){
+                    if(result.status == 200){zwaveService.successNotificationTranslated('SETTINGS_APPLIED');}
                     else{zwaveService.errorNotificationTranslated('ERROR')}
                 })
         }

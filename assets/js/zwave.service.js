@@ -25,8 +25,10 @@
             setNodeName: setNodeName,
             healNetwork: healNetwork,
             setNodeParam: setNodeParam,
-            softReset : softReset,
-            setup : setup,
+            softReset: softReset,
+            setup: setup,
+            getPorts: getPorts,
+            setPort: setPort,
             successNotificationTranslated: successNotificationTranslated,
             errorNotificationTranslated: errorNotificationTranslated
         };
@@ -63,6 +65,14 @@
 
         function setup() {
             return $http({method: 'GET', url: '/zwave/setup/'});
+        }
+
+        function getPorts() {
+            return $http({method: 'GET', url: '/zwave/getports/'});
+        }
+
+        function setPort(options) {
+            return $http({method: 'PATCH', url: '/zwave/setport/', data: options});
         }
 
         function successNotificationTranslated(key, complement){

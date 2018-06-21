@@ -15,6 +15,8 @@ healNetwork = require('../lib/zwave.healNetwork.js');
 setNodeParam = require('../lib/zwave.setNodeParam.js');
 softReset = require('../lib/zwave.softReset.js');
 setupNodes = require('../lib/zwave.setup.js');
+getPorts = require('../lib/zwave.getPorts.js');
+setPort = require('../lib/zwave.setPort.js');
 
 module.exports = {
 
@@ -55,6 +57,16 @@ module.exports = {
 
   setup: function(req, res, next){
     setupNodes()
+      .then((result) => res.json(result))
+  },
+
+  getPorts: function(req, res, next){
+    getPorts()
+      .then((result) => res.json(result))
+  },
+
+  setPort: function(req, res, next){
+    setPort(req.body)
       .then((result) => res.json(result))
   },
 
