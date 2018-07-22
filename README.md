@@ -21,9 +21,9 @@ Go the configuration panel.
 
 You can here configure your z-wave installation !
 
-## Install Open Zwave manually Raspberry Pi
+### Install Open Zwave manually Raspberry Pi
 
-Eexecute the following commands : 
+Execute the following commands : 
 
 ```
 sudo apt-get install libudev-dev
