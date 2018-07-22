@@ -7,5 +7,5 @@
     "serialport": "^6.2.0"
   },
   "author": "Pierre-Gilles Leymarie",
-  "license": "Creative Commons 3.0 France"
+  "license": "MIT"
 }
