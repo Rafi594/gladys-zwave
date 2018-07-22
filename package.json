@@ -1,6 +1,6 @@
 {
   "name": "gladys-zwave",
-  "version": "2.0.1",
+  "version": "3.0.0",
   "description": "This module enable zwave control in Gladys",
   "dependencies": {
     "openzwave-shared": "^1.4.1",
