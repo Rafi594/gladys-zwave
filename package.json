@@ -1,11 +1,14 @@
 {
-  "name": "gladys-zwave",
-  "version": "3.0.1",
-  "description": "This module enable zwave control in Gladys",
-  "dependencies": {
-    "openzwave-shared": "^1.4.1",
-    "serialport": "^6.2.0"
+  "name": "gladys-RFLink",
+  "version": "0.2.1",
+  "description": "Gladys hooks to send and receive RFLink formated data thru serial port.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "Pierre-Gilles Leymarie",
-  "license": "MIT"
+  "author": "Matthieu Lemaitre",
+  "license": "CC-BY-NC-SA-3.0",
+  "dependencies": {
+    "serialport": "^3.1.2"
+  }
 }
